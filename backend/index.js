@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import documentRoutes from './routes/documents.js';
+import chatRoutes from './routes/chat.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 // --- Auth Routes ---
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
+app.use('/api/chat', chatRoutes);
 
 // --- Database Connection & Server Start ---
 // We use a self-invoking async function to connect to the DB

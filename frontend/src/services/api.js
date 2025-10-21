@@ -40,5 +40,14 @@ export const deleteDocument = (id) => {
   return apiClient.delete(`/documents/${id}`);
 };
 
+// Starts a new chat session (gets initial questions)
+export const startChat = () => {
+  return apiClient.post('/chat/start');
+};
 
+// Sends a user's answer and gets AI feedback
+export const sendQuery = (data) => {
+  // data will be { chatId, question, message }
+  return apiClient.post('/chat/query', data);
+};
 export default apiClient;

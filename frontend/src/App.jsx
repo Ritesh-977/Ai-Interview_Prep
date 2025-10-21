@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Upload from './pages/Upload.jsx';
+import Chat from './pages/Chat.jsx';
 
 // Import Page Components
 import Login from './pages/Login';
@@ -10,12 +11,6 @@ import Signup from './pages/Signup';
 
 // --- Page Components (Placeholders for now) ---
 const Landing = () => <div className="text-center"><h1 className="text-3xl font-bold">Welcome to the AI Interview Prep App!</h1></div>;
-const Chat = () => (
-  <div className="text-center">
-    <h1 className="text-3xl font-bold">Chat with the AI Interviewer</h1>
-    <p>(You can only see this if you are logged in)</p>
-  </div>
-);
 
 // --- Navbar Component ---
 const Navbar = () => {

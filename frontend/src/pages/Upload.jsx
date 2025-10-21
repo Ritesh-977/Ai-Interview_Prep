@@ -33,7 +33,15 @@ const DocumentItem = ({ doc, onFileDelete }) => {
         >
           {doc.type}
         </span>
-        <p className="text-gray-700 ml-2 inline">{doc.fileName}</p>
+        {/* <p className="text-gray-700 ml-2 inline">{doc.fileName}</p> */}
+        <a
+          href={doc.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline ml-2"
+        >
+          {doc.fileName}
+        </a>
       </div>
       <button
         onClick={() => onFileDelete(doc._id)}
