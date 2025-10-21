@@ -4,13 +4,11 @@ import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Upload from './pages/Upload.jsx';
 import Chat from './pages/Chat.jsx';
+import Landing from './pages/Landing.jsx';
 
 // Import Page Components
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
-// --- Page Components (Placeholders for now) ---
-const Landing = () => <div className="text-center"><h1 className="text-3xl font-bold">Welcome to the AI Interview Prep App!</h1></div>;
 
 // --- Navbar Component ---
 const Navbar = () => {
@@ -57,7 +55,7 @@ function App() {
       <main className="container mx-auto p-4">
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Landing />} />
+         <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
