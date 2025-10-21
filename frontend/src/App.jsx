@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              <span className="text-gray-700">Welcome, {user?.email}</span>
+              <span className="text-gray-700">{user?.name}</span>
               <Link to="/upload" className="text-gray-600 hover:text-blue-500">Upload</Link>
               <Link to="/chat" className="text-gray-600 hover:text-blue-500">Chat</Link>
               <button 

@@ -18,7 +18,7 @@ const generateToken = (id) => {
 // @desc    Register a new user
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // 1. Check if user already exists
     const userExists = await User.findOne({ email });
@@ -29,6 +29,7 @@ router.post('/signup', async (req, res) => {
     // 2. Create and save the new user
     // (The 'pre-save' hook in our model will auto-hash the password)
     const user = await User.create({
+      name,
       email,
       password,
     });
@@ -41,6 +42,7 @@ router.post('/signup', async (req, res) => {
         token,
         user: {
           id: user._id,
+          name: user.name,
           email: user.email,
         },
       });
@@ -72,6 +74,7 @@ router.post('/login', async (req, res) => {
         token,
         user: {
           id: user._id,
+          name: user.name,
           email: user.email,
         },
       });

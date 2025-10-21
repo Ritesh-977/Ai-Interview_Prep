@@ -7,30 +7,32 @@ const AuthContext = createContext();
 
 // 2. Create the Provider Component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+
+ const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [loading, setLoading] = useState(false);
 
   // Effect to set the token in localStorage and axios headers
   useEffect(() => {
-    if (token) {
-      localStorage.setItem('token', token); // 
-      // Set the auth token for all future axios requests
+    if (token && user) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user)); // <-- Store user object
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       localStorage.removeItem('token');
+      localStorage.removeItem('user'); // <-- Remove user object
       delete apiClient.defaults.headers.common['Authorization'];
     }
-  }, [token]);
+  }, [token, user]);
 
   // --- Functions ---
 
-  const login = async (email, password) => {
+ const login = async (email, password) => {
     setLoading(true);
     try {
       const response = await loginUser({ email, password });
-      setToken(response.data.token); // [cite: 19]
-      setUser(response.data.user); // [cite: 19]
+      setToken(response.data.token);
+      setUser(response.data.user); // This will trigger the useEffect
       setLoading(false);
       return response;
     } catch (error) {
@@ -39,12 +41,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password) => {
+  const signup = async (name, email, password) => {
     setLoading(true);
     try {
-      const response = await signupUser({ email, password });
-      setToken(response.data.token); // [cite: 19]
-      setUser(response.data.user); // [cite: 19]
+      const response = await signupUser({ name, email, password });
+      setToken(response.data.token);
+      setUser(response.data.user); // This will trigger the useEffect
       setLoading(false);
       return response;
     } catch (error) {
