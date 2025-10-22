@@ -18,35 +18,80 @@ const ProgressBar = ({ progress }) => (
 );
 
 // Single document item
-const DocumentItem = ({ doc, onFileDelete }) => (
-  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border">
-    <div>
-      <span
-        className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-          doc.type === 'resume'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-blue-100 text-blue-800'
-        }`}
-      >
-        {doc.type}
-      </span>
-      <a
-        href={doc.fileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-600 hover:underline ml-2"
-      >
-        {doc.fileName}
-      </a>
+// const DocumentItem = ({ doc, onFileDelete }) => (
+//   <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border">
+//     <div>
+//       <span
+//         className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
+//           doc.type === 'resume'
+//             ? 'bg-green-100 text-green-800'
+//             : 'bg-blue-100 text-blue-800'
+//         }`}
+//       >
+//         {doc.type}
+//       </span>
+//       <a
+//         href={doc.fileUrl}
+//         target="_blank"
+//         rel="noopener noreferrer"
+//         className="text-blue-600 hover:underline ml-2"
+//       >
+//         {doc.fileName}
+//       </a>
+//     </div>
+//     <button
+//       onClick={() => onFileDelete(doc._id)}
+//       className="text-red-500 hover:text-red-700 font-medium"
+//     >
+//       Delete
+//     </button>
+//   </div>
+// );
+
+
+const DocumentItem = ({ doc, onFileDelete }) => {
+  // Create the download URL by dynamically adding the 'fl_attachment' flag
+
+
+  return (
+    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border">
+      {/* File Info */}
+      <div className="flex items-center gap-3">
+        <span
+          className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
+            doc.type === 'resume'
+              ? 'bg-green-100 text-green-800'
+              : 'bg-blue-100 text-blue-800'
+          }`}
+        >
+          {doc.type}
+        </span>
+        <span className="text-gray-700 font-medium">{doc.fileName}</span>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center gap-4">
+        {/* VIEW BUTTON */}
+        <a
+          href={doc.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 font-medium"
+        >
+          View
+        </a>
+        
+        {/* DELETE BUTTON */}
+        <button
+          onClick={() => onFileDelete(doc._id)}
+          className="text-red-500 hover:text-red-700 font-medium"
+        >
+          Delete
+        </button>
+      </div>
     </div>
-    <button
-      onClick={() => onFileDelete(doc._id)}
-      className="text-red-500 hover:text-red-700 font-medium"
-    >
-      Delete
-    </button>
-  </div>
-);
+  );
+};
 
 const Upload = () => {
   const [resume, setResume] = useState(null);

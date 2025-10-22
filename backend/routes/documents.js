@@ -67,6 +67,7 @@ router.post("/upload", protect, upload.single("file"), async (req, res) => {
       public_id: fileName, // Use the name without the extension
       resource_type: "raw",
       format: 'pdf',
+      access_mode: 'public',
     });
 
     const fileUrl = uploadResult.secure_url;
