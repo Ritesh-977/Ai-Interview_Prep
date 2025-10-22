@@ -1,44 +1,22 @@
 import mongoose from 'mongoose';
 
-// This sub-schema will store one chunk of text and its corresponding vector
-const chunkSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-  embedding: {
-    type: [Number], // An array of numbers (the vector embedding)
-    required: true,
-  },
+const ChunkSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  embedding: { type: [Number], required: true },
 });
 
-const documentSchema = new mongoose.Schema(
+const DocumentSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Links this document to a specific user
-      required: true,
-    },
-    type: {
-      type: String,
-      enum: ['resume', 'jd'], // Can only be 'resume' or 'jd'
-      required: true,
-    },
-    fileName: {
-      type: String,
-      required: true,
-    },
-    fileUrl: {
-      type: String, // The URL from Cloudinary
-      required: true,
-    },
-    chunks: [chunkSchema], // An array of text/embedding chunks
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    type: { type: String, enum: ['resume', 'jd'], required: true },
+    fileName: { type: String, required: true },
+    fileUrl: { type: String, required: true },
+    chunks: [ChunkSchema],
+    embeddingFailed: { type: Boolean, default: false }, // <-- New field
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Document = mongoose.model('Document', documentSchema);
+const Document = mongoose.model('Document', DocumentSchema);
 
 export default Document;

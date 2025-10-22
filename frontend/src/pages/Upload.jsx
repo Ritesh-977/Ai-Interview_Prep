@@ -7,51 +7,46 @@ import {
   deleteDocument,
 } from '../services/api';
 
-// A simple component for the progress bar
-const ProgressBar = ({ progress }) => {
-  return (
-    <div className="w-full bg-gray-200 rounded-full h-2.5 my-2">
-      <div
-        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-        style={{ width: `${progress}%` }}
-      ></div>
-    </div>
-  );
-};
+// Progress bar component
+const ProgressBar = ({ progress }) => (
+  <div className="w-full bg-gray-200 rounded-full h-2.5 my-2">
+    <div
+      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+      style={{ width: `${progress}%` }}
+    ></div>
+  </div>
+);
 
-// A component to display a single uploaded document
-const DocumentItem = ({ doc, onFileDelete }) => {
-  return (
-    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border">
-      <div>
-        <span
-          className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-            doc.type === 'resume'
-              ? 'bg-green-100 text-green-800'
-              : 'bg-blue-100 text-blue-800'
-          }`}
-        >
-          {doc.type}
-        </span>
-        {/* <p className="text-gray-700 ml-2 inline">{doc.fileName}</p> */}
-        <a
-          href={doc.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline ml-2"
-        >
-          {doc.fileName}
-        </a>
-      </div>
-      <button
-        onClick={() => onFileDelete(doc._id)}
-        className="text-red-500 hover:text-red-700 font-medium"
+// Single document item
+const DocumentItem = ({ doc, onFileDelete }) => (
+  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border">
+    <div>
+      <span
+        className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
+          doc.type === 'resume'
+            ? 'bg-green-100 text-green-800'
+            : 'bg-blue-100 text-blue-800'
+        }`}
       >
-        Delete
-      </button>
+        {doc.type}
+      </span>
+      <a
+        href={doc.fileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline ml-2"
+      >
+        {doc.fileName}
+      </a>
     </div>
-  );
-};
+    <button
+      onClick={() => onFileDelete(doc._id)}
+      className="text-red-500 hover:text-red-700 font-medium"
+    >
+      Delete
+    </button>
+  </div>
+);
 
 const Upload = () => {
   const [resume, setResume] = useState(null);
@@ -61,7 +56,6 @@ const Upload = () => {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
 
-  // Fetch documents when the page loads
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -76,28 +70,24 @@ const Upload = () => {
     }
   };
 
-  // Handles the file input change
   const handleFileChange = (e, fileType) => {
     const file = e.target.files[0];
-    if (file && file.type !== 'application/pdf') {
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
       toast.error('Only PDF files are allowed');
-      e.target.value = null; // Clear the input
+      e.target.value = null;
       return;
     }
-    if (file && file.size > 2 * 1024 * 1024) { // 2MB limit
+    if (file.size > 2 * 1024 * 1024) {
       toast.error('File size cannot exceed 2MB');
-      e.target.value = null; // Clear the input
+      e.target.value = null;
       return;
     }
 
-    if (fileType === 'resume') {
-      setResume(file);
-    } else {
-      setJd(file);
-    }
+    fileType === 'resume' ? setResume(file) : setJd(file);
   };
 
-  // Handles the file upload
   const handleUpload = async (fileType) => {
     const file = fileType === 'resume' ? resume : jd;
     if (!file) {
@@ -121,7 +111,8 @@ const Upload = () => {
       });
 
       toast.success(`${fileType} uploaded successfully!`);
-      // Clear the file input after upload
+
+      // Clear file input after upload
       if (fileType === 'resume') {
         setResume(null);
         document.getElementById('resume-input').value = null;
@@ -129,8 +120,8 @@ const Upload = () => {
         setJd(null);
         document.getElementById('jd-input').value = null;
       }
-      
-      fetchDocuments(); // Refresh the list
+
+      fetchDocuments();
     } catch (error) {
       toast.error('Upload failed. Please try again.');
       console.error(error);
@@ -140,29 +131,27 @@ const Upload = () => {
     }
   };
 
-  // Handles file deletion
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this document?')) {
-      return;
-    }
+    if (!window.confirm('Are you sure you want to delete this document?')) return;
     try {
       await deleteDocument(id);
       toast.success('Document deleted');
-      fetchDocuments(); // Refresh the list
+      fetchDocuments();
     } catch (error) {
       toast.error('Failed to delete document');
       console.error(error);
     }
   };
-  
-  // Check if both docs are uploaded
-  const hasResume = documents.some(doc => doc.type === 'resume');
-  const hasJd = documents.some(doc => doc.type === 'jd');
+
+  // Check uploaded documents
+  const resumeDoc = documents.find((doc) => doc.type === 'resume');
+  const jdDoc = documents.find((doc) => doc.type === 'jd');
+  const canStart = resumeDoc && jdDoc;
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* --- UPLOAD FORMS --- */}
+        {/* Resume Upload */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-4">1. Upload Your Resume</h3>
           <p className="text-sm text-gray-600 mb-4">
@@ -190,6 +179,7 @@ const Upload = () => {
           </button>
         </div>
 
+        {/* JD Upload */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-4">2. Upload Job Description</h3>
           <p className="text-sm text-gray-600 mb-4">
@@ -218,7 +208,7 @@ const Upload = () => {
         </div>
       </div>
 
-      {/* --- UPLOADED DOCUMENTS LIST --- */}
+      {/* Uploaded Documents List */}
       <div className="bg-white p-6 rounded-lg shadow-md mt-8">
         <h3 className="text-xl font-semibold mb-4">Your Uploaded Documents</h3>
         <div className="space-y-3">
@@ -230,12 +220,20 @@ const Upload = () => {
             <p className="text-gray-500 text-center">No documents uploaded yet.</p>
           )}
         </div>
-        
-        {/* --- PROCEED TO CHAT BUTTON --- */}
-        {hasResume && hasJd && (
+
+        {/* Start Mock Interview */}
+        {canStart && (
           <div className="text-center mt-6">
-            <button 
-              onClick={() => navigate('/chat')}
+            <button
+              onClick={() => {
+                if (resumeDoc.embeddingFailed || jdDoc.embeddingFailed) {
+                  toast.error(
+                    "Embeddings could not be generated due to OpenAI quota limits. Please try again later."
+                  );
+                  return;
+                }
+                navigate('/chat');
+              }}
               className="bg-purple-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-700 transition duration-300"
             >
               Start Your Mock Interview!
