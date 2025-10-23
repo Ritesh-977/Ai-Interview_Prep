@@ -4,8 +4,8 @@ This is a full-stack Single Page Application (SPA) designed to help job seekers 
 
 ## Live Demo
 
-* **Live App (Vercel):** `[INSERT YOUR-LIVE-VERCEL-URL-HERE]`
-* **Live API (Render):** `[INSERT YOUR-LIVE-RENDER-URL-HERE]`
+* **Live App (Vercel):** [https://ai-interview-prep-murex.vercel.app/](https://ai-interview-prep-murex.vercel.app/)
+* **Live API (Render):** [https://ai-interview-prep-fw8m.onrender.com/](https://ai-interview-prep-fw8m.onrender.com/)
 
 ## Features
 
